@@ -1,0 +1,17 @@
+{
+  "name": "predy",
+  "version": "0.1.0",
+  "description": "Predy: autonomous multi-agent yield prediction swarm with VeriBond trust engine.",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js",
+    "test:smoke": "node tests/smoke.mjs"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "ethers": "^6.13.2",
+    "express": "^4.19.2"
+  }
+}

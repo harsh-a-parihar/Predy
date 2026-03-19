@@ -1,0 +1,23 @@
+{
+  "name": "Predy",
+  "version": "0.1.0",
+  "description": "Jarvis-style multi-agent yield optimization swarm with VeriBond trust engine.",
+  "agents": [
+    "OrchestratorAgent",
+    "DataAgent",
+    "ConsensusAgent",
+    "PrivacyAgent",
+    "ExecutorAgent"
+  ],
+  "skills": [
+    "data.fetch",
+    "consensus.predict",
+    "privacy.sanitize",
+    "execute.action",
+    "human.chat",
+    "trust.stake",
+    "trust.resolve",
+    "trust.reputation",
+    "trust.bond"
+  ]
+}
