@@ -2,8 +2,9 @@
 
 ## 1. Overall Architecture (High-Level Flow)
 
+```mermaid
 flowchart TD
-    A[Human User\n(Jarvis-style Dashboard)] --> B[OrchestratorAgent\n(Router + Memory + Approvals)]
+    A["Human User\n(Jarvis-style Dashboard)"] --> B["OrchestratorAgent\n(Router + Memory + Approvals)"]
     B <--> C[Live Group Chat\nOpenClaw Dashboard + @Agent]
     B --> D[DataAgent\n+ Micro-agents]
     D --> E[ConsensusAgent\n+ VeriBond Staking Vote]
@@ -13,46 +14,47 @@ flowchart TD
     G --> I[Base Chain\nLido + Uniswap + ERC-8004]
     H --> J[Beautiful Dashboard\nStaking UI + History + Proofs + Recommendations]
     J <--> A
-
     subgraph "Micro-Agentic Layer"
         D1[SentimentMicro]
         D2[OnChainMicro]
         E1[VoteMicro]
         E2[ProbabilityMicro]
     end
+```
 
 ## 2. Componential Architecture (Layered View)
 
-graph TB
-    subgraph UI
-        Dashboard[VeriBond Next.js Dashboard + Chat]
-    end
-
-    subgraph Orchestration
-        Orchestrator[OrchestratorAgent + Memory]
-    end
-
-    subgraph Swarm
-        Data[DataAgent] --> Consensus[ConsensusAgent]
-        Consensus --> Privacy[PrivacyAgent]
-        Privacy --> Executor[ExecutorAgent]
-    end
-
-    subgraph Trust
-        VeriBond[VeriBond Engine\nStaking + Slashing + Bonding + Reputation]
-    end
-
-    subgraph Execution
-        Chain[Base + Lido + Uniswap + ERC-8004]
-    end
-
+```mermaid
+flowchart TB
+ subgraph UI["UI"]
+        Dashboard["VeriBond Next.js Dashboard + Chat"]
+  end
+ subgraph Orchestration["Orchestration"]
+        Orchestrator["OrchestratorAgent + Memory"]
+  end
+ subgraph Swarm["Swarm"]
+        Consensus["ConsensusAgent"]
+        Data["DataAgent"]
+        Privacy["PrivacyAgent"]
+        Executor["ExecutorAgent"]
+  end
+ subgraph Trust["Trust"]
+        VeriBond["VeriBond Engine\nStaking + Slashing + Bonding + Reputation"]
+  end
+ subgraph Execution["Execution"]
+        Chain["Base + Lido + Uniswap + ERC-8004"]
+  end
+    Data --> Consensus
+    Consensus --> Privacy
+    Privacy --> Executor
     Dashboard <--> Orchestrator
     Orchestrator <--> Data
-    Executor <--> VeriBond
-    Executor <--> Chain
+    Executor <--> VeriBond & Chain
+```
 
 ## 3. Modular Architecture (Clean Code View)
 
+```mermaid
 mindmap
   root((Predy))
     Orchestrator
@@ -78,9 +80,11 @@ mindmap
       DashboardReact
       ChatUI
       HistoryViewer
+```
 
 ## 4. Dataflow Architecture (End-to-End Cycle)
 
+```mermaid
 sequenceDiagram
     participant H as Human
     participant O as Orchestrator
@@ -101,4 +105,5 @@ sequenceDiagram
     E->>Ch: Safe Lido/Uniswap tx
     Ch->>O: Tx hash + proof
     O->>H: Alert + Dashboard update + History
+```
 
