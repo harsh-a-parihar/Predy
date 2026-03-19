@@ -1,18 +1,104 @@
-# Predy Architecture
+# Predy Architecture – Complete Visual & Technical Design
 
-```mermaid
+## 1. Overall Architecture (High-Level Flow)
+
 flowchart TD
-    A[Human via Dashboard] --> B[OrchestratorAgent]
-    B --> C[DataAgent]
-    C --> D[ConsensusAgent]
-    D --> E[PrivacyAgent]
-    E --> F[ExecutorAgent]
-    D --> G[VeriBond Trust Engine\nStaking + Slashing + Reputation]
-    F --> H[Base Chain\nLido + Uniswap]
-    B <--> I[OpenClaw Group Chat\n+ @Agent replies]
-    G --> J[Dashboard UI\nHistory + Staking View]
-```mermaid
+    A[Human User\n(Jarvis-style Dashboard)] --> B[OrchestratorAgent\n(Router + Memory + Approvals)]
+    B <--> C[Live Group Chat\nOpenClaw Dashboard + @Agent]
+    B --> D[DataAgent\n+ Micro-agents]
+    D --> E[ConsensusAgent\n+ VeriBond Staking Vote]
+    E --> F[PrivacyAgent\nVenice Private Inference]
+    F --> G[ExecutorAgent\nScope Check + Action]
+    G --> H[VeriBond Trust Engine\nStake / Slash / Bond / Attest / Reputation]
+    G --> I[Base Chain\nLido + Uniswap + ERC-8004]
+    H --> J[Beautiful Dashboard\nStaking UI + History + Proofs + Recommendations]
+    J <--> A
 
-# Predy Modules & Responsibilities
+    subgraph "Micro-Agentic Layer"
+        D1[SentimentMicro]
+        D2[OnChainMicro]
+        E1[VoteMicro]
+        E2[ProbabilityMicro]
+    end
 
-(Full table similar to previous responses but expanded with VeriBond columns – I kept it concise for response, but it’s complete in spirit.)
+## 2. Componential Architecture (Layered View)
+
+graph TB
+    subgraph UI
+        Dashboard[VeriBond Next.js Dashboard + Chat]
+    end
+
+    subgraph Orchestration
+        Orchestrator[OrchestratorAgent + Memory]
+    end
+
+    subgraph Swarm
+        Data[DataAgent] --> Consensus[ConsensusAgent]
+        Consensus --> Privacy[PrivacyAgent]
+        Privacy --> Executor[ExecutorAgent]
+    end
+
+    subgraph Trust
+        VeriBond[VeriBond Engine\nStaking + Slashing + Bonding + Reputation]
+    end
+
+    subgraph Execution
+        Chain[Base + Lido + Uniswap + ERC-8004]
+    end
+
+    Dashboard <--> Orchestrator
+    Orchestrator <--> Data
+    Executor <--> VeriBond
+    Executor <--> Chain
+
+## 3. Modular Architecture (Clean Code View)
+
+mindmap
+  root((Predy))
+    Orchestrator
+      SessionManager
+      ApprovalHandler
+      MemoryLayer
+    Agents
+      DataAgent
+      ConsensusAgent
+      PrivacyAgent
+      ExecutorAgent
+    TrustEngine
+      VeriBondStaking
+      SlashingLogic
+      BondingCurve
+      ReputationAttest
+    Execution
+      EthersWrapper
+      LidoVault
+      UniswapSwap
+      ScopeValidator
+    UI
+      DashboardReact
+      ChatUI
+      HistoryViewer
+
+## 4. Dataflow Architecture (End-to-End Cycle)
+
+sequenceDiagram
+    participant H as Human
+    participant O as Orchestrator
+    participant D as DataAgent
+    participant C as Consensus
+    participant P as Privacy
+    participant E as Executor
+    participant V as VeriBond
+    participant Ch as Chain
+
+    H->>O: Optimize my yield safely
+    O->>D: Fetch signals
+    D->>C: Raw data
+    C->>V: Stake on prediction
+    C->>P: Consensus result
+    P->>E: Private version
+    E->>V: Execute + slash/reward
+    E->>Ch: Safe Lido/Uniswap tx
+    Ch->>O: Tx hash + proof
+    O->>H: Alert + Dashboard update + History
+
