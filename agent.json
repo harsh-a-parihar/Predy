@@ -19,5 +19,16 @@
     "trust.resolve",
     "trust.reputation",
     "trust.bond"
-  ]
+  ],
+  "openclaw": {
+    "skillsRoot": "openclaw/skills",
+    "entries": [
+      { "name": "data.fetch", "path": "openclaw/skills/data-fetch/handler.js" },
+      { "name": "consensus.predict", "path": "openclaw/skills/consensus-predict/handler.js" },
+      { "name": "privacy.sanitize", "path": "openclaw/skills/privacy-sanitize/handler.js" },
+      { "name": "execute.action", "path": "openclaw/skills/execute-action/handler.js" },
+      { "name": "human.chat", "path": "openclaw/skills/human-chat/handler.js" }
+    ],
+    "fallback": "Node.js backend routes in src/api/routes.js"
+  }
 }

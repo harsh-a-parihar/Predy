@@ -7,7 +7,9 @@ export async function runConsensusAgent({ dataOutput, trustEngine, predictionId 
     probabilityMicro({ dataOutput })
   ]);
 
-  const stakeAmount = Number((0.1 + probability.confidence * 0.4).toFixed(3));
+  // TruthStake enforces minStake (1 USDC on default VeriBond deploy).
+  const raw = Number((0.1 + probability.confidence * 0.4).toFixed(3));
+  const stakeAmount = Math.max(1, raw);
   const stake = await trustEngine.stake({
     agentId: "ConsensusAgent",
     predictionId,

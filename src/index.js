@@ -6,10 +6,7 @@ import { Orchestrator } from "./orchestrator/index.js";
 import { createServer } from "./api/server.js";
 
 function bootstrap() {
-  const trustEngine = new VeriBondEngine({
-    simulationMode: config.simulationMode,
-    config
-  });
+  const trustEngine = new VeriBondEngine({ config });
   const memory = new SessionMemory();
   const orchestrator = new Orchestrator({ trustEngine, memory, logger });
   createServer({ config, orchestrator, trustEngine, memory, logger });

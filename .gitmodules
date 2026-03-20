@@ -1,0 +1,3 @@
+[submodule "vendor/Veribond"]
+	path = vendor/Veribond
+	url = https://github.com/Rohanarora17/VeriBond.git

@@ -1,6 +1,7 @@
 import { validateScope } from "../../execution/scopeValidator.js";
 import { executeLidoAction } from "../../execution/lido.js";
 import { executeUniswapAction } from "../../execution/uniswap.js";
+import { config } from "../../utils/config.js";
 
 export async function runExecutorAgent({
   predictionId,
@@ -10,7 +11,12 @@ export async function runExecutorAgent({
 }) {
   const action = consensusOutput.prediction;
   const amount = Number((privacyOutput.publicConfidence / 100).toFixed(2));
-  const scope = validateScope({ action, amount });
+  const scope = validateScope({
+    action,
+    amount,
+    simulationMode: config.simulationMode,
+    usdcAddress: config.contracts.usdc
+  });
 
   if (!scope.allowed) {
     return {
@@ -22,8 +28,21 @@ export async function runExecutorAgent({
 
   const execution =
     action === "increase-steth-exposure"
-      ? await executeLidoAction({ action, amount })
-      : await executeUniswapAction({ action, amount });
+      ? await executeLidoAction({
+          action,
+          amount,
+          simulationMode: config.simulationMode,
+          rpcUrl: config.baseRpcUrl,
+          privateKey: config.privateKey
+        })
+      : await executeUniswapAction({
+          action,
+          amount,
+          simulationMode: config.simulationMode,
+          rpcUrl: config.baseRpcUrl,
+          privateKey: config.privateKey,
+          usdcAddress: config.contracts.usdc
+        });
 
   // For MVP demo, resolve success if confidence >= 60.
   const isCorrect = privacyOutput.publicConfidence >= 60;

@@ -1,16 +1,14 @@
-export async function updateBondingCurve({ simulationMode, success }) {
-  if (simulationMode) {
-    return {
-      status: "ok",
-      direction: success ? "up" : "down",
-      txHash: "SIMULATED_BOND_TX"
-    };
-  }
+import { logger } from "../utils/logger.js";
 
-  // Placeholder for real bonding contract write.
+/**
+ * No bonding-curve contract is wired yet — return an explicit status (no fake tx).
+ */
+export async function updateBondingCurve({ success }) {
+  logger.info("trust.bond.noop", { success, note: "Bonding curve contract not configured" });
   return {
-    status: "pending-implementation",
+    status: "noop",
     direction: success ? "up" : "down",
-    txHash: null
+    txHash: null,
+    note: "Deploy VERIBOND_BONDING_ADDRESS and wire ABI to enable on-chain bonding."
   };
 }
