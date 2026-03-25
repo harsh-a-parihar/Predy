@@ -1,8 +1,16 @@
+import { fetchLidoStethApr } from "./lidoApr.js";
+
 export async function onChainMicro() {
-  // Placeholder for real Lido/Uniswap metrics pull.
+  const lido = await fetchLidoStethApr();
   return {
     source: "onChainMicro",
-    lidoApr: 3.91,
+    lidoApr: lido.lidoApr,
+    lidoMeta: {
+      timeUnix: lido.timeUnix,
+      page: lido.page,
+      fallback: lido.fallback || false,
+      error: lido.error
+    },
     stEthDiscountBps: 4
   };
 }

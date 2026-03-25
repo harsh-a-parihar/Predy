@@ -5,3 +5,5 @@ dashboard/.next/
 *.log
 dist/
 coverage/
+# Local SQLite (users/swarms)
+data/

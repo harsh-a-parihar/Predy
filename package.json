@@ -8,9 +8,11 @@
     "start": "node src/index.js",
     "dev": "node --watch src/index.js",
     "test:smoke": "node tests/smoke.mjs",
-    "test:execute": "node tests/execute.mjs"
+    "test:execute": "node tests/execute.mjs",
+    "test:e2e": "node tests/e2e-full.mjs"
   },
   "dependencies": {
+    "better-sqlite3": "^11.7.0",
     "dotenv": "^16.4.5",
     "ethers": "^6.13.2",
     "express": "^4.19.2"

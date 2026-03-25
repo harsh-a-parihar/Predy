@@ -1,14 +1,17 @@
+import "./globals.css";
+import { Inter } from "next/font/google";
+
+const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
+
 export const metadata = {
-  title: "Predy Dashboard",
-  description: "Jarvis-style swarm dashboard with VeriBond trust view"
+  title: "Predy — Command Center",
+  description: "Multi-agent yield swarm with VeriBond — Base Sepolia"
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body style={{ margin: 0, fontFamily: "ui-sans-serif, system-ui, sans-serif", background: "#0B1020", color: "#E6ECFF" }}>
-        {children}
-      </body>
+    <html lang="en" className="dark">
+      <body className={`${inter.variable} ${inter.className} antialiased`}>{children}</body>
     </html>
   );
 }

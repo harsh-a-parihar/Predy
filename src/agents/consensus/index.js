@@ -1,26 +1,36 @@
-import { voteMicro } from "./micro/vote.js";
-import { probabilityMicro } from "./micro/probability.js";
+import { runPredictionMarket } from "./micro/predictionMarket.js";
+import { config } from "../../utils/config.js";
 
-export async function runConsensusAgent({ dataOutput, trustEngine, predictionId }) {
-  const [vote, probability] = await Promise.all([
-    voteMicro({ dataOutput }),
-    probabilityMicro({ dataOutput })
-  ]);
+export async function runConsensusAgent({ dataOutput, trustEngine, predictionId, memory }) {
+  const market = await runPredictionMarket({ dataOutput, config });
+  const safeConfidence = Number.isFinite(Number(market.confidence))
+    ? Math.max(0.35, Math.min(0.95, Number(market.confidence)))
+    : 0.65;
 
-  // TruthStake enforces minStake (1 USDC on default VeriBond deploy).
-  const raw = Number((0.1 + probability.confidence * 0.4).toFixed(3));
+  const raw = Number((0.1 + safeConfidence * 0.4).toFixed(3));
   const stakeAmount = Math.max(1, raw);
   const stake = await trustEngine.stake({
     agentId: "ConsensusAgent",
     predictionId,
     amount: stakeAmount,
-    confidence: probability.confidence
+    confidence: safeConfidence
   });
 
-  return {
+  const output = {
     agent: "ConsensusAgent",
-    prediction: vote.vote,
-    confidence: probability.confidence,
+    prediction: market.prediction,
+    confidence: safeConfidence,
+    market,
     stake
   };
+
+  memory?.addForAgent?.("ConsensusAgent", {
+    type: "consensus_output",
+    predictionId,
+    prediction: market.prediction,
+    confidence: safeConfidence,
+    marketMode: market.mode
+  });
+
+  return output;
 }

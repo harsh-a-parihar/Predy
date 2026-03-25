@@ -7,7 +7,8 @@ export async function runExecutorAgent({
   predictionId,
   consensusOutput,
   privacyOutput,
-  trustEngine
+  trustEngine,
+  memory
 }) {
   const action = consensusOutput.prediction;
   const amount = Number((privacyOutput.publicConfidence / 100).toFixed(2));
@@ -19,6 +20,12 @@ export async function runExecutorAgent({
   });
 
   if (!scope.allowed) {
+    memory?.addForAgent?.("ExecutorAgent", {
+      type: "executor_output",
+      predictionId,
+      executed: false,
+      reason: scope.reason
+    });
     return {
       agent: "ExecutorAgent",
       executed: false,
@@ -44,7 +51,6 @@ export async function runExecutorAgent({
           usdcAddress: config.contracts.usdc
         });
 
-  // For MVP demo, resolve success if confidence >= 60.
   const isCorrect = privacyOutput.publicConfidence >= 60;
   const resolution = await trustEngine.resolve({
     agentId: "ConsensusAgent",
@@ -54,10 +60,19 @@ export async function runExecutorAgent({
   });
   await trustEngine.bond({ agentId: "ConsensusAgent", success: isCorrect });
 
-  return {
+  const output = {
     agent: "ExecutorAgent",
     executed: true,
     execution,
     resolution
   };
+
+  memory?.addForAgent?.("ExecutorAgent", {
+    type: "executor_output",
+    predictionId,
+    executed: true,
+    txHash: execution?.transactionHash || execution?.txHash || execution?.hash
+  });
+
+  return output;
 }
